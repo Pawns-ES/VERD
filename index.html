@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pawns Spanish Golden Edition</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top, #3a2b00, #050505 75%);
+      color: white;
+      position: relative;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .intro-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 10;
+      animation: fadeOut 1.5s ease 3s forwards;
+    }
+
+    .intro-title {
+      color: gold;
+      font-size: 56px;
+      font-weight: bold;
+      text-shadow: 0 0 20px gold;
+      animation: pulse 2s infinite;
+    }
+
+    .intro-sub {
+      margin-top: 10px;
+      letter-spacing: 4px;
+      color: #d4af37;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: 370px;
+      padding: 28px;
+      border-radius: 28px;
+      background: rgba(8,8,8,0.82);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,215,0,0.4);
+      box-shadow:
+        0 0 35px rgba(255,215,0,0.25),
+        0 0 80px rgba(0,0,0,0.75);
+    }
+
+    .title {
+      text-align: center;
+      font-size: 30px;
+      color: gold;
+      margin-bottom: 10px;
+      text-shadow: 0 0 14px rgba(255,215,0,0.75);
+    }
+
+    .intro-text {
+      text-align: center;
+      margin-bottom: 22px;
+      color: #d4af37;
+      letter-spacing: 2px;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .btn {
+      text-decoration: none;
+      color: white;
+      padding: 18px 14px;
+      border-radius: 22px;
+      text-align: center;
+      font-size: 17px;
+      font-weight: bold;
+      background: linear-gradient(145deg, #4b3600, #151515);
+      border: 1px solid rgba(255,215,0,0.3);
+      transition: 0.25s ease;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        0 8px 18px rgba(0,0,0,0.35);
+    }
+
+    .btn:hover {
+      transform: scale(1.05) translateY(-3px);
+      background: linear-gradient(145deg, #6a4b00, #202020);
+      box-shadow: 0 0 20px rgba(255,215,0,0.35);
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+<div class="intro-screen">
+  <div class="intro-title">♛ PAWNS SPANISH ♛</div>
+  <div class="intro-sub">GOLD EDITION</div>
+</div>
+
+<canvas id="bg"></canvas>
+
+<div class="container">
+  <div class="title">♟ Pawns Spanish</div>
+  <div class="intro-text">Club de ajedrez</div>
+
+  <div class="grid">
+    <a class="btn" href="https://www.chess.com/club/pawns-spanish" target="_blank">🏠 Inicio</a>
+
+    <a class="btn" href="https://www.chess.com/clubs/events/pawns-spanish" target="_blank">📅 Eventos</a>
+
+    <a class="btn" href="https://www.chess.com/club/pawns-spanish/announcements" target="_blank">📢 Anuncios</a>
+
+    <a class="btn" href="https://www.chess.com/clubs/forum/pawns-spanish" target="_blank">💬 Foros</a>
+
+    <a class="btn" href="https://www.chess.com/leaderboard/daily?group=845955" target="_blank">🏆 Ranking</a>
+
+    <a class="btn" href="https://pawns-es.github.io/PawnsSpanishTODO/" target="_blank">💻 GitHub</a>
+  </div>
+
+  <div class="footer">
+    Comunidad Pawns Spanish • Chess.com Style
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+
+  let w = canvas.width = window.innerWidth;
+  let h = canvas.height = window.innerHeight;
+
+  const chessPieces = ['♔','♕','♖','♗','♘','♙'];
+  const particles = [];
+
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      piece: chessPieces[Math.floor(Math.random() * chessPieces.length)],
+      x: Math.random() * w,
+      y: Math.random() * h,
+      speed: 1 + Math.random() * 2,
+      size: 18 + Math.random() * 20
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+
+    particles.forEach(p => {
+      p.y += p.speed;
+
+      if (p.y > h + 50) {
+        p.y = -50;
+        p.x = Math.random() * w;
+      }
+
+      ctx.font = `${p.size}px serif`;
+      ctx.fillStyle = 'rgba(255,215,0,0.75)';
+      ctx.fillText(p.piece, p.x, p.y);
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  window.addEventListener('resize', () => {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  });
+</script>
+
+</body>
+</html>
